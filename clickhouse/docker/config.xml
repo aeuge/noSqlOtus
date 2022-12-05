@@ -1,0 +1,29 @@
+<yandex>
+  <timezone>Europe/Moscow</timezone>
+  <listen_host>::</listen_host>
+  <listen_host>0.0.0.0</listen_host>
+  <listen_try>1</listen_try>
+
+  <remote_servers>
+    <local_cluster>
+      <shard>
+        <replica>
+          <host>clickhouse</host>
+          <port>9000</port>
+        </replica>
+      </shard>
+    </local_cluster>
+  </remote_servers>
+
+  <zookeeper>
+    <node index="1">
+      <host>zookeeper</host>
+      <port>2181</port>
+    </node>
+  </zookeeper>
+
+  <networks>
+    <ip>::/0</ip>
+  </networks>
+
+</yandex>
