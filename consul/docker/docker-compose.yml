@@ -1,0 +1,113 @@
+version: '3.7'
+
+services:
+
+  consul-server1:
+    image: hashicorp/consul:1.14.3
+    container_name: consul-server1
+    hostname: consul-server1
+    restart: always
+    volumes:
+     - ./server1.json:/consul/config/server1.json:ro
+     - ./certs/:/consul/config/certs/:ro
+    networks:
+     - consul
+    ports:
+     - "8500:8500"
+     - "8600:8600/tcp"
+     - "8600:8600/udp"
+    command: "agent -bootstrap-expect=3"
+
+  consul-server2:    
+    image: hashicorp/consul:1.14.3
+    container_name: consul-server2
+    hostname: consul-server2
+    restart: always
+    volumes:
+     - ./server2.json:/consul/config/server2.json:ro
+     - ./certs/:/consul/config/certs/:ro
+    networks:
+     - consul
+    command: "agent -bootstrap-expect=3"
+
+  consul-server3:    
+    image: hashicorp/consul:1.14.3
+    container_name: consul-server3
+    hostname: consul-server3
+    restart: always
+    volumes:
+     - ./server3.json:/consul/config/server3.json:ro
+     - ./certs/:/consul/config/certs/:ro
+    networks:
+     - consul
+    command: "agent -bootstrap-expect=3"
+
+  consul-server4:
+    image: hashicorp/consul:1.14.3
+    container_name: consul-server4
+    hostname: consul-server4
+    restart: always
+    volumes:
+     - ./server4.json:/consul/config/server4.json:ro
+     - ./certs/:/consul/config/certs/:ro
+    networks:
+     - consul
+    command: "agent -bootstrap-expect=3"
+
+  nginx1:
+    image: consul-nginx:latest
+    container_name: nginx1
+    hostname: nginx1
+    restart: always
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock    
+    volumes:
+      - ./nginx1.json:/etc/consul.d/nginx1.json:ro
+      - ./certs/:/etc/consul.d/config/certs/:ro
+      - ./nginx1/log/:/var/log/nginx
+    ports:
+      - "8081:80"
+    networks:
+      - consul
+  
+  nginx2:
+    image: consul-nginx:latest
+    container_name: nginx2
+    hostname: nginx2
+    restart: always
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock    
+    volumes:
+      - ./nginx2.json:/etc/consul.d/nginx2.json:ro
+      - ./certs/:/etc/consul.d/config/certs/:ro
+      - ./nginx2/log/:/var/log/nginx
+    ports:
+      - "8082:80"
+    networks:
+      - consul
+      
+  nginx3:
+    image: consul-nginx:latest
+    container_name: nginx3
+    hostname: nginx3
+    restart: always
+    tmpfs:
+      - /run
+      - /tmp
+      - /run/lock    
+    volumes:
+      - ./nginx3.json:/etc/consul.d/nginx3.json:ro
+      - ./certs/:/etc/consul.d/config/certs/:ro
+      - ./nginx3/log/:/var/log/nginx
+    ports:
+      - "8083:80"
+    networks:
+      - consul
+
+networks:
+  consul:
+    driver: bridge
