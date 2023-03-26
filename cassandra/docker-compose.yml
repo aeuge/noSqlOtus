@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  node1:
+    image: bitnami/cassandra:latest
+    container_name: cassandra_node1
+    environment:
+      - "CASSANDRA_SEEDS=node1,node2,node3"
+      - "CASSANDRA_CLUSTER_NAME=cassandra_cluster"
+      - "CASSANDRA_DC=datacenter1"
+      - "CASSANDRA_RACK=rack1"
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./node1/data:/var/lib/cassandra
+
+  node2:
+    image: bitnami/cassandra:latest
+    container_name: cassandra_node2
+    environment:
+      - "CASSANDRA_SEEDS=node1,node2,node3"
+      - "CASSANDRA_CLUSTER_NAME=cassandra_cluster"
+      - "CASSANDRA_DC=datacenter1"
+      - "CASSANDRA_RACK=rack1"
+    ports:
+      - "9043:9042"
+    volumes:
+      - ./node2/data:/var/lib/cassandra
+
+  node3:
+    image: bitnami/cassandra:latest
+    container_name: cassandra_node3
+    environment:
+      - "CASSANDRA_SEEDS=node1,node2,node3"
+      - "CASSANDRA_CLUSTER_NAME=cassandra_cluster"
+      - "CASSANDRA_DC=datacenter1"
+      - "CASSANDRA_RACK=rack1"
+    ports:
+      - "9044:9042"
+    volumes:
+      - ./node3/data:/var/lib/cassandra
