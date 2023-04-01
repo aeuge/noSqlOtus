@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  tarantool1:
+    image: tarantool/tarantool
+    environment:
+      TARANTOOL_REPLICATION: "tarantool1,tarantool2"
+    networks:
+      - mynet
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./tarantool:/opt/tarantool
+
+  tarantool2:
+    image: tarantool/tarantool
+    environment:
+      TARANTOOL_REPLICATION: "tarantool1,tarantool2"
+    networks:
+      - mynet
+    ports:
+      - "3302:3301"
+    volumes:
+      - ./tarantool:/opt/tarantool
+
+networks:
+  mynet:
+    driver: bridge
