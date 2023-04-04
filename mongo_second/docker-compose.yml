@@ -1,0 +1,104 @@
+version: '3'
+
+services:
+  configsvr1:
+    image: mongo:latest
+    command: mongod --configsvr --replSet configserver --bind_ip_all
+    ports:
+      - "27017:27017"
+    networks:
+      - shard_network
+  configsvr2:
+    image: mongo:latest
+    command: mongod --configsvr --replSet configserver --bind_ip_all
+    ports:
+      - "27018:27017"
+    networks:
+      - shard_network
+  configsvr3:
+    image: mongo:latest
+    command: mongod --configsvr --replSet configserver --bind_ip_all
+    ports:
+      - "27019:27017"
+    networks:
+      - shard_network
+  shard1a:
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard1 --bind_ip_all
+    ports:
+      - "27020:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+      - configsvr3
+  shard1b:
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard1 --bind_ip_all
+    ports:
+      - "27021:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+      - configsvr3
+  shard1c:
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard1 --bind_ip_all
+    ports:
+      - "27022:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+      - configsvr3
+  shard2a:
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard2 --bind_ip_all
+    ports:
+      - "27023:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+      - configsvr3
+  shard2b:
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard2 --bind_ip_all
+    ports:
+      - "27024:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+      - configsvr3
+  shard2c:
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard2 --bind_ip_all
+    ports:
+      - "27025:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+      - configsvr3
+  router:
+    image: mongo:latest
+    command: mongos --configdb configserver/configsvr1:27017,configsvr2:27017,configsvr3:27017 --bind_ip_all
+    ports:
+      - "27016:27017"
+    networks:
+      - shard_network
+    depends_on:
+      - configsvr1
+      - configsvr2
+
+networks:
+  shard_network:
+    driver: bridge
